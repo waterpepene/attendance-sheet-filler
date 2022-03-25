@@ -54,19 +54,19 @@ can.drawString(355, 550, data['student_ID'])  # company name
 
 # address and the course can be quite long as a name, so if they are over 70 characters, decrease font for them
 if len(address_1) + len(address_2) >= 70:
-    can.setFont("SF_Pro", 10)
+    can.setFont("Custom_Font", data["font_size"] - 1)
     can.drawString(135, 502, address_1)  # company name
     can.drawString(135, 514, address_2)  # company name
-    can.setFont("SF_Pro", 11)
+    can.setFont("Custom_Font", data["font_size"])
 else:
     can.drawString(135, 502, address_1)  # company name
     can.drawString(135, 514, address_2)  # company name
 
 if len(student_course_1) + len(student_course_2) >= 70:
-    can.setFont("SF_Pro", 10)
+    can.setFont("Custom_Font", data["font_size"] - 1)
     can.drawString(355, 502, student_course_1)  # company name
     can.drawString(355, 514, student_course_2)  # company name
-    can.setFont("SF_Pro", 11)
+    can.setFont("Custom_Font", data["font_size"])
 else:
     can.drawString(355, 502, student_course_1)  # company name
     can.drawString(355, 514, student_course_2)  # company name
