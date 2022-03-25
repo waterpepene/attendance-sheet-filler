@@ -6,7 +6,7 @@ import io
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import letter
 import json
-from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfbase.ttfonts import TTFont, TTFError
 from reportlab.pdfbase import pdfmetrics
 
 # import details.json
@@ -32,12 +32,18 @@ with open('details.json') as json_file:
 FILE_NAME = 'Sheet.pdf'
 FILE_NAME_NEW = 'SheetFilled.pdf'
 # this is the font that will be used in the pdf
-pdfmetrics.registerFont(TTFont('Custom_Font', 'Custom_Font.ttf'))
+font_name = 'Helvetica'
+try:
+    pdfmetrics.registerFont(TTFont('Custom_Font', 'Custom_Font.ttf'))
+    font_name = 'Custom_Font'
+except TTFError:
+    print("Font file could not be opened. Going back to default font")
+
 packet = io.BytesIO()
 # create a new PDF with Reportlab
 can = canvas.Canvas(packet, pagesize=letter)
 # change font to SF Pro cause we cool here
-can.setFont("Custom_Font", data["font_size"])
+can.setFont(font_name, data["font_size"])
 
 # region Employer Details
 can.drawString(160, 665, data['company_name'])  # company name
@@ -54,19 +60,19 @@ can.drawString(355, 550, data['student_ID'])  # company name
 
 # address and the course can be quite long as a name, so if they are over 70 characters, decrease font for them
 if len(address_1) + len(address_2) >= 70:
-    can.setFont("Custom_Font", data["font_size"] - 1)
+    can.setFont(font_name, data["font_size"] - 1)
     can.drawString(135, 502, address_1)  # company name
     can.drawString(135, 514, address_2)  # company name
-    can.setFont("Custom_Font", data["font_size"])
+    can.setFont(font_name, data["font_size"])
 else:
     can.drawString(135, 502, address_1)  # company name
     can.drawString(135, 514, address_2)  # company name
 
 if len(student_course_1) + len(student_course_2) >= 70:
-    can.setFont("Custom_Font", data["font_size"] - 1)
+    can.setFont(font_name, data["font_size"] - 1)
     can.drawString(355, 502, student_course_1)  # company name
     can.drawString(355, 514, student_course_2)  # company name
-    can.setFont("Custom_Font", data["font_size"])
+    can.setFont(font_name, data["font_size"])
 else:
     can.drawString(355, 502, student_course_1)  # company name
     can.drawString(355, 514, student_course_2)  # company name
@@ -106,12 +112,12 @@ output = PdfFileWriter()
 page = existing_pdf.getPage(0)
 page.mergePage(new_pdf.getPage(0))
 output.addPage(page)
-# finally, write "output" to a real file
 # close microsoft edge browser
-os.system("taskkill /f /im MicrosoftEdge.exe")
-time.sleep(2)
+# os.system("taskkill /f /im MicrosoftEdge.exe")
+# time.sleep(2)
+# finally, write "output" to a real file
 outputStream = open(FILE_NAME_NEW, "wb")
 # open microsoft edge browser with the new pdf
-os.startfile(FILE_NAME_NEW)
+# os.startfile(FILE_NAME_NEW)
 output.write(outputStream)
 outputStream.close()
